@@ -1,0 +1,335 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    HRM SYSTEM - DATABASE SCHEMA VISUAL                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          DATABASE RELATIONSHIPS                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                              AUTH.USERS (Supabase)
+                                    │
+                                    │ id
+                                    ▼
+                    ┌──────────────────────────────┐
+                    │       USERS (Quản lý)        │
+                    ├──────────────────────────────┤
+                    │ id (PK)                      │
+                    │ email (UNIQUE)               │
+                    │ role (admin/hr/employee)     │
+                    │ employee_id (FK) ──┐         │
+                    │ created_at         │         │
+                    │ updated_at         │         │
+                    └────────┬───────────┼────┬────┘
+                             │           │    │
+                             │           │    └──────────┐
+                             │           │               │
+                             ▼           │               ▼
+                    ┌──────────────────┐ │    ┌──────────────────────┐
+                    │   EMPLOYEES      │ │    │ NOTIFICATIONS (1:N)  │
+                    ├──────────────────┤ │    ├──────────────────────┤
+                    │ id (PK)          │ │    │ id (PK)              │
+                    │ employee_code    │ │    │ user_id (FK)         │
+                    │ full_name        │ │    │ type                 │
+                    │ email (UNIQUE)   │ │    │ title                │
+                    │ phone            │ │    │ message              │
+                    │ gender           │ │    │ read                 │
+                    │ birth_date       │ │    │ related_id           │
+                    │ address          │ │    │ created_at           │
+                    │ department_id ───┼─┼─┐  │ updated_at           │
+                    │ position_id ─────┼─┼─┼──┐ created_at          │
+                    │ salary           │ │ │ └──────────────────────┘
+                    │ avatar_url       │ │ │
+                    │ status           │ │ │
+                    │ start_date       │ │ │
+                    │ created_at       │ │ │
+                    │ updated_at       │ │ │
+                    └────┬────────┬────┘ │ │
+                         │        │      │ │
+                 ┌───────┘        └──┬───┘ │
+                 │                   │     │
+                 │                   ▼     │
+         ┌───────▼──────────┐  ┌────────────────────┐
+         │  DEPARTMENTS     │  │     POSITIONS      │
+         ├──────────────────┤  ├────────────────────┤
+         │ id (PK)          │  │ id (PK)            │
+         │ name (UNIQUE)    │  │ name (UNIQUE)      │
+         │ description      │  │ description        │
+         │ manager_id (FK)  │  │ allowance          │
+         │ created_at       │  │ created_at         │
+         │ updated_at       │  │ updated_at         │
+         └──────────────────┘  └────────────────────┘
+
+         ┌──────────────────┐  ┌──────────────────┐
+         │   ATTENDANCE     │  │ LEAVE_REQUESTS   │
+         ├──────────────────┤  ├──────────────────┤
+         │ id (PK)          │  │ id (PK)          │
+         │ employee_id (FK) │  │ employee_id (FK) │
+         │ date (UNIQUE)    │  │ leave_type       │
+         │ check_in         │  │ start_date       │
+         │ check_out        │  │ end_date         │
+         │ status           │  │ reason           │
+         │ notes            │  │ status           │
+         │ created_at       │  │ reviewed_by (FK) │
+         │ updated_at       │  │ reviewed_at      │
+         │                  │  │ comments         │
+         │ (1:N with users) │  │ created_at       │
+         │                  │  │ updated_at       │
+         │                  │  │                  │
+         │ (1:N with users) │  │ (1:N with users) │
+         └──────────────────┘  └──────────────────┘
+
+         ┌──────────────────┐
+         │    PAYROLLS      │
+         ├──────────────────┤
+         │ id (PK)          │
+         │ employee_id (FK) │
+         │ month (UNIQUE)   │
+         │ base_salary      │
+         │ allowance        │
+         │ bonus            │
+         │ deduction        │
+         │ total_salary     │
+         │ status           │
+         │ created_at       │
+         │ updated_at       │
+         │                  │
+         │ (1:N with users) │
+         └──────────────────┘
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        TABLE COLUMN REFERENCE                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                            1. USERS TABLE                                   ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ From auth.users            ║
+║ email           │ VARCHAR (UNIQUE)  │ ✅       │ Email login                ║
+║ role            │ ENUM              │ ✅       │ admin/hr/employee          ║
+║ employee_id     │ UUID (FK)         │ ❌       │ → employees.id             ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        2. DEPARTMENTS TABLE                                 ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ name            │ VARCHAR(UNIQUE)   │ ✅       │ Department name            ║
+║ description     │ TEXT              │ ❌       │ Department description     ║
+║ manager_id      │ UUID (FK)         │ ❌       │ → users.id (manager)       ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         3. POSITIONS TABLE                                  ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ name            │ VARCHAR(UNIQUE)   │ ✅       │ Position name              ║
+║ description     │ TEXT              │ ❌       │ Job description            ║
+║ allowance       │ DECIMAL(12,2)     │ ❌       │ Allowance (VND)            ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        4. EMPLOYEES TABLE                                   ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ employee_code   │ VARCHAR(UNIQUE)   │ ✅       │ Mã NV (NV001, NV002...)    ║
+║ full_name       │ VARCHAR(255)      │ ✅       │ Họ tên đầy đủ              ║
+║ email           │ VARCHAR(UNIQUE)   │ ✅       │ Email công ty              ║
+║ phone           │ VARCHAR(20)       │ ❌       │ Phone number               ║
+║ gender          │ ENUM              │ ❌       │ male/female/other          ║
+║ birth_date      │ DATE              │ ❌       │ Ngày sinh                  ║
+║ address         │ TEXT              │ ❌       │ Địa chỉ                    ║
+║ department_id   │ UUID (FK)         │ ❌       │ → departments.id           ║
+║ position_id     │ UUID (FK)         │ ❌       │ → positions.id             ║
+║ salary          │ DECIMAL(12,2)     │ ❌       │ Lương cơ bản (VND)         ║
+║ avatar_url      │ VARCHAR(500)      │ ❌       │ Avatar URL                 ║
+║ status          │ ENUM              │ ✅       │ active/inactive/on_leave   ║
+║ start_date      │ DATE              │ ✅       │ Ngày vào làm               ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                       5. ATTENDANCE TABLE                                   ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ employee_id     │ UUID (FK)         │ ✅       │ → employees.id             ║
+║ date            │ DATE (UNIQUE)     │ ✅       │ Ngày chấm công             ║
+║ check_in        │ TIMESTAMP         │ ❌       │ Giờ vào                    ║
+║ check_out       │ TIMESTAMP         │ ❌       │ Giờ ra                     ║
+║ status          │ ENUM              │ ✅       │ present/late/absent/leave  ║
+║ notes           │ TEXT              │ ❌       │ Ghi chú                    ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    6. LEAVE_REQUESTS TABLE                                  ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ employee_id     │ UUID (FK)         │ ✅       │ → employees.id             ║
+║ leave_type      │ VARCHAR(100)      │ ✅       │ Annual/Sick/Personal...    ║
+║ start_date      │ DATE              │ ✅       │ Từ ngày                    ║
+║ end_date        │ DATE              │ ✅       │ Đến ngày                   ║
+║ reason          │ TEXT              │ ❌       │ Lý do xin nghỉ             ║
+║ status          │ ENUM              │ ✅       │ pending/approved/rejected  ║
+║ reviewed_by     │ UUID (FK)         │ ❌       │ → users.id (HR)            ║
+║ reviewed_at     │ TIMESTAMP         │ ❌       │ Ngày duyệt                 ║
+║ comments        │ TEXT              │ ❌       │ Nhận xét                   ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      7. PAYROLLS TABLE                                      ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ employee_id     │ UUID (FK)         │ ✅       │ → employees.id             ║
+║ month           │ DATE (UNIQUE)     │ ✅       │ Tháng (2024-01-01)         ║
+║ base_salary     │ DECIMAL(12,2)     │ ❌       │ Lương cơ bản (VND)         ║
+║ allowance       │ DECIMAL(12,2)     │ ❌       │ Phụ cấp (VND)              ║
+║ bonus           │ DECIMAL(12,2)     │ ❌       │ Thưởng (VND)               ║
+║ deduction       │ DECIMAL(12,2)     │ ❌       │ Khấu trừ (VND)             ║
+║ total_salary    │ DECIMAL(12,2)     │ ✅       │ Tổng = base+allow+bonus-ded║
+║ status          │ ENUM              │ ✅       │ draft/processed/paid       ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    8. NOTIFICATIONS TABLE                                   ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ Column          │ Type              │ Required │ Notes                       ║
+╠═════════════════╪═══════════════════╪══════════╪════════════════════════════╣
+║ id              │ UUID (PK)         │ ✅       │ Auto-generated             ║
+║ user_id         │ UUID (FK)         │ ✅       │ → users.id                 ║
+║ type            │ VARCHAR(100)      │ ✅       │ Loại thông báo             ║
+║ title           │ VARCHAR(255)      │ ✅       │ Tiêu đề                    ║
+║ message         │ TEXT              │ ❌       │ Nội dung chi tiết          ║
+║ read            │ BOOLEAN           │ ✅       │ Đã đọc? (default: false)   ║
+║ related_id      │ UUID              │ ❌       │ ID của object liên quan    ║
+║ created_at      │ TIMESTAMP         │ ✅       │ Auto-generated             ║
+║ updated_at      │ TIMESTAMP         │ ✅       │ Auto-updated               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          ENUM VALUES REFERENCE                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+user_role:
+  • 'admin'    → Full system access
+  • 'hr'       → HR functions, employee management
+  • 'employee' → Self-service functions
+
+employee_status:
+  • 'active'    → Currently working
+  • 'inactive'  → Not working (resigned, dismissed)
+  • 'on_leave'  → On vacation/leave
+
+attendance_status:
+  • 'present' → Present at work
+  • 'late'    → Came late
+  • 'absent'  → Absent
+  • 'leave'   → On approved leave
+
+leave_status:
+  • 'pending'   → Waiting for approval
+  • 'approved'  → Approved by HR
+  • 'rejected'  → Rejected by HR
+
+payroll_status:
+  • 'draft'     → Draft, not finalized
+  • 'processed' → Processed, ready to pay
+  • 'paid'      → Already paid to employee
+
+gender_enum:
+  • 'male'   → Male
+  • 'female' → Female
+  • 'other'  → Other
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        INDEXES FOR PERFORMANCE                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Index Name                       Table             Purpose
+─────────────────────────────────────────────────────────────────────────────
+idx_users_role                   users             Quick filter by role
+idx_users_employee_id            users             Link user to employee
+idx_employees_department_id      employees         Filter by department
+idx_employees_position_id        employees         Filter by position
+idx_employees_status             employees         Filter by status
+idx_attendance_employee_id       attendance        Find records by employee
+idx_attendance_date              attendance        Find records by date
+idx_leave_requests_employee_id   leave_requests    Find requests by employee
+idx_leave_requests_status        leave_requests    Find by status
+idx_payrolls_employee_id         payrolls          Find payroll by employee
+idx_payrolls_month               payrolls          Find by month
+idx_notifications_user_id        notifications     Find notifications by user
+idx_notifications_read           notifications     Find unread notifications
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      EXAMPLE DATA FLOW                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1. User Signup:
+   └─ Create → auth.users (Supabase)
+              → public.users (email, role='employee')
+
+2. Create Employee:
+   └─ departments ✓ → SELECT id
+   └─ positions ✓ → SELECT id
+   └─ → INSERT employees (with department_id, position_id)
+
+3. Check In/Out:
+   └─ employees → GET id
+   └─ → INSERT attendance (employee_id, date, check_in, status)
+
+4. Request Leave:
+   └─ employees → GET id
+   └─ → INSERT leave_requests (employee_id, leave_type, status='pending')
+   └─ HR reviews → UPDATE status = 'approved/rejected'
+
+5. Calculate Payroll:
+   └─ employees → GET salary
+   └─ positions → GET allowance
+   └─ INSERT payrolls (base_salary + allowance)
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       QUICK SETUP CHECKLIST                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✅ Run 01_create_schema.sql to create all tables
+✅ Run 02_sample_data.sql to add test data
+✅ Verify in Supabase SQL Editor:
+   SELECT table_name FROM information_schema.tables
+   WHERE table_schema = 'public';
+✅ Should see 8 tables (users, departments, positions, employees, attendance, 
+                         leave_requests, payrolls, notifications)
+✅ Check .env.local has NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+✅ Run `npm run dev` and test!
+
+═════════════════════════════════════════════════════════════════════════════════
