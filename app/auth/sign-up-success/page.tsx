@@ -27,15 +27,15 @@ export default function SignUpSuccessPage() {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Account Created!
+            Đã đăng ký thành công!
           </h1>
           <p className="text-gray-600 mb-6">
-            Please check your email to confirm your account. Click the link in the email to activate your account.
+            Vui lòng kiểm tra email của bạn để xác nhận tài khoản. Nhấp vào liên kết trong email để kích hoạt tài khoản của bạn.
           </p>
 
           <Link href="/auth/login">
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2">
-              Back to Login
+              Quay lại Đăng nhập
             </Button>
           </Link>
         </div>

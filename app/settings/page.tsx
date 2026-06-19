@@ -38,13 +38,13 @@ export default function SettingsPage() {
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-          <p className="text-muted-foreground mt-1">Manage your account and preferences</p>
+          <h1 className="text-3xl font-bold text-foreground">Cài đặt</h1>
+          <p className="text-muted-foreground mt-1">Quản lý tài khoản và tùy chọn</p>
         </div>
 
         {/* Account Information */}
         <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Account Information</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Thông tin tài khoản</h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-1">
@@ -54,13 +54,13 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-1">
-                User ID
+                Mã người dùng
               </label>
               <p className="text-foreground font-mono text-sm">{user?.id || '-'}</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-1">
-                Account Created
+                Đã đăng ký vào ngày
               </label>
               <p className="text-foreground">
                 {user?.created_at 
@@ -74,7 +74,7 @@ export default function SettingsPage() {
 
         {/* Preferences */}
         <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Preferences</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Tùy chọn</h2>
           
           <div className="space-y-4">
             {/* Theme Toggle */}
@@ -86,9 +86,9 @@ export default function SettingsPage() {
                   <Moon size={20} className="text-blue-400" />
                 )}
                 <div>
-                  <p className="font-medium text-foreground">Dark Mode</p>
+                  <p className="font-medium text-foreground">Chế độ tối</p>
                   <p className="text-sm text-muted-foreground">
-                    {theme === 'light' ? 'Light mode enabled' : 'Dark mode enabled'}
+                    {theme === 'light' ? 'Chế độ sáng đã được bật' : 'Chế độ tối đã được bật'}
                   </p>
                 </div>
               </div>
@@ -109,9 +109,9 @@ export default function SettingsPage() {
             {/* Notifications */}
             <div className="flex items-center justify-between p-4 rounded-lg border border-border">
               <div>
-                <p className="font-medium text-foreground">Email Notifications</p>
+                <p className="font-medium text-foreground">Thông báo qua email</p>
                 <p className="text-sm text-muted-foreground">
-                  Receive updates about leave requests and attendance
+                  Nhận cập nhật về các yêu cầu nghỉ phép và chấm công
                 </p>
               </div>
               <input type="checkbox" defaultChecked className="w-6 h-6 rounded" />
@@ -120,12 +120,13 @@ export default function SettingsPage() {
             {/* Language */}
             <div className="flex items-center justify-between p-4 rounded-lg border border-border">
               <div>
-                <p className="font-medium text-foreground">Language</p>
+                <p className="font-medium text-foreground">Ngôn ngữ</p>
                 <p className="text-sm text-muted-foreground">
-                  Choose your preferred language
+                  Chọn ngôn ngữ ưa thích của bạn
                 </p>
               </div>
               <select className="px-3 py-2 border border-border rounded-lg bg-background">
+                <option>Tiếng Việt</option>
                 <option>English</option>
                 <option>Spanish</option>
                 <option>French</option>
@@ -136,76 +137,76 @@ export default function SettingsPage() {
 
         {/* Security */}
         <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Security</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Bảo mật</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-lg border border-border">
               <div>
-                <p className="font-medium text-foreground">Change Password</p>
+                <p className="font-medium text-foreground">Đổi mật khẩu</p>
                 <p className="text-sm text-muted-foreground">
-                  Update your account password regularly
+                  Cập nhật mật khẩu tài khoản định kỳ
                 </p>
               </div>
-              <Button variant="outline">Change</Button>
+              <Button variant="outline">Đổi</Button>
             </div>
 
             <div className="flex items-center justify-between p-4 rounded-lg border border-border">
               <div>
-                <p className="font-medium text-foreground">Two-Factor Authentication</p>
+                <p className="font-medium text-foreground">Xác thực hai lớp</p>
                 <p className="text-sm text-muted-foreground">
-                  Add an extra layer of security
+                  Thêm một lớp bảo mật bổ sung
                 </p>
               </div>
-              <Button variant="outline">Enable</Button>
+              <Button variant="outline">Bật</Button>
             </div>
 
             <div className="flex items-center justify-between p-4 rounded-lg border border-border">
               <div>
-                <p className="font-medium text-foreground">Active Sessions</p>
+                <p className="font-medium text-foreground">Sessions đang hoạt động</p>
                 <p className="text-sm text-muted-foreground">
-                  View and manage your active sessions
+                  Xem và quản lý các phiên đang hoạt động
                 </p>
               </div>
-              <Button variant="outline">View</Button>
+              <Button variant="outline">Xem</Button>
             </div>
           </div>
         </div>
 
         {/* About */}
         <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-xl font-semibold text-foreground mb-4">About</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Giới thiệu</h2>
           
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Application</span>
-              <span className="text-foreground font-medium">HRM System v1.0.0</span>
+              <span className="text-muted-foreground">Ứng dụng</span>
+              <span className="text-foreground font-medium">HRM System </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Build Date</span>
+              <span className="text-muted-foreground">Ngày xây dựng</span>
               <span className="text-foreground font-medium">
                 {new Date().toLocaleDateString()}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Status</span>
-              <span className="text-foreground font-medium text-green-600">Running</span>
+              <span className="text-muted-foreground">Trạng thái</span>
+              <span className="text-foreground font-medium text-green-600">Đang chạy</span>
             </div>
           </div>
         </div>
 
         {/* Danger Zone */}
         <div className="bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 p-6">
-          <h2 className="text-xl font-semibold text-red-700 dark:text-red-400 mb-4">Danger Zone</h2>
+          <h2 className="text-xl font-semibold text-red-700 dark:text-red-400 mb-4">Nguy hiểm</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-lg border border-red-200 dark:border-red-800 bg-white dark:bg-red-900/10">
               <div>
-                <p className="font-medium text-red-700 dark:text-red-400">Delete Account</p>
+                <p className="font-medium text-red-700 dark:text-red-400">Xóa Tài Khoản</p>
                 <p className="text-sm text-red-600 dark:text-red-500">
-                  Permanently delete your account and all associated data
+                  Hành động này không thể hoàn tác. Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn.
                 </p>
               </div>
-              <Button variant="destructive">Delete</Button>
+              <Button variant="destructive">Xóa</Button>
             </div>
           </div>
         </div>

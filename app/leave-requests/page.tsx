@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Plus, X, Check, XCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
+
 interface LeaveRequest {
   id: string
   employee_id: string
@@ -54,18 +55,23 @@ export default function LeaveRequestsPage() {
 
       setEmployees(empData || [])
 
-      const { data: reqData } = await supabase
+      const { data: reqData, error: reqError } = await supabase
         .from('leave_requests')
         .select(`
           *,
-          employee:employee_id(full_name),
-          reviewer:reviewed_by(full_name)
+          employee:employee_id(full_name)
         `)
         .order('start_date', { ascending: false })
 
+      console.log('Leave Requests:', reqData)
+      console.log('Fetch Error:', reqError)
+
+      if (reqError) throw reqError
+
       setLeaveRequests(reqData || [])
+
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Có lỗi xảy ra:', error)
     } finally {
       setLoading(false)
     }
@@ -90,7 +96,7 @@ export default function LeaveRequestsPage() {
       if (error) throw error
       await fetchData()
     } catch (error) {
-      console.error('Error approving request:', error)
+      console.error('Có lỗi xảy ra khi duyệt yêu cầu:', error)
     }
   }
 
@@ -107,35 +113,56 @@ export default function LeaveRequestsPage() {
       if (error) throw error
       await fetchData()
     } catch (error) {
-      console.error('Error rejecting request:', error)
+      console.error('Có lỗi xảy ra khi từ chối yêu cầu:', error)
     }
   }
 
   const handleSubmitRequest = async (data: Partial<LeaveRequest>) => {
-    try {
-      if (selectedRequest) {
-        const { error } = await supabase
-          .from('leave_requests')
-          .update(data)
-          .eq('id', selectedRequest.id)
-        if (error) throw error
-      } else {
-        const { error } = await supabase
-          .from('leave_requests')
-          .insert([{ ...data, status: 'pending' }])
-        if (error) throw error
-      }
-      await fetchData()
-      setIsDialogOpen(false)
-    } catch (error) {
-      console.error('Error saving request:', error)
-    }
-  }
+  console.log('Submit clicked')
+  console.log(data)
 
+  try {
+    const result = await supabase
+      .from('leave_requests')
+      .insert([
+        {
+          employee_id: data.employee_id,
+          leave_type: data.leave_type,
+          start_date: data.start_date,
+          end_date: data.end_date,
+          reason: data.reason,
+          status: 'pending',
+        },
+])
+.select()
+    console.log('Result:', result)
+
+    if (result.error) {
+      alert(result.error.message)
+      console.error(result.error)
+      return
+    }
+
+    alert('Thành công')
+    await fetchData()
+    setIsDialogOpen(false)
+  } catch (err) {
+    console.error('Catch error:', err)
+    alert('Catch error')
+  }
+}
   const statusColors = {
-    pending: 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
-    approved: 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400',
-    rejected: 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400',
+  pending:
+    'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400',
+  approved:
+    'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400',
+  rejected:
+    'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400',
+  }
+  const statusLabels = {
+    pending: 'Chờ duyệt',
+    approved: 'Đã duyệt',
+    rejected: 'Từ chối',
   }
 
   const columns = [
@@ -148,17 +175,21 @@ export default function LeaveRequestsPage() {
     {
       key: 'leave_type' as const,
       label: 'Leave Type',
+      
       sortable: true,
+
     },
     {
       key: 'start_date' as const,
-      label: 'Start Date',
-      sortable: true,
+      label: 'Ngày Bắt Đầu',
+      render: (value: string) =>
+        new Date(value).toLocaleDateString('vi-VN'),
     },
     {
       key: 'end_date' as const,
-      label: 'End Date',
-      sortable: true,
+      label: 'Ngày Kết Thúc',
+      render: (value: string) =>
+        new Date(value).toLocaleDateString('vi-VN'),
     },
     {
       key: 'reason' as const,
@@ -166,10 +197,14 @@ export default function LeaveRequestsPage() {
     },
     {
       key: 'status' as const,
-      label: 'Status',
+      label: 'Trạng Thái',
       render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[value as keyof typeof statusColors]}`}>
-          {value.charAt(0).toUpperCase() + value.slice(1)}
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            statusColors[value as keyof typeof statusColors]
+          }`}
+        >
+          {statusLabels[value as keyof typeof statusLabels]}
         </span>
       ),
     },
@@ -206,108 +241,167 @@ export default function LeaveRequestsPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Leave Requests</h1>
-            <p className="text-muted-foreground mt-1">Manage employee leave requests</p>
+            <h1 className="text-3xl font-bold text-foreground">Yêu Cầu Nghỉ Phép</h1>
+            <p className="text-muted-foreground mt-1">Quản lý yêu cầu nghỉ phép của nhân viên</p>
           </div>
           <Button onClick={handleAddRequest} className="flex items-center gap-2">
             <Plus size={20} />
-            Request Leave
+            Yêu Cầu Nghỉ Phép
           </Button>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">Đang tải...</p>
           </div>
         ) : (
           <DataTable
             columns={columns}
             data={leaveRequests}
-            searchPlaceholder="Search by employee..."
+            searchPlaceholder="Tìm kiếm theo nhân viên..."
             searchableFields={['leave_type']}
           />
         )}
 
-        {/* Dialog */}
+       {/* Dialog */}
+       
+      {/* Dialog */}
         {isDialogOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-card rounded-lg border border-border p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">
-                  {selectedRequest ? 'Edit Leave Request' : 'Request Leave'}
-                </h2>
-                <button onClick={() => setIsDialogOpen(false)} className="p-1 hover:bg-accent rounded">
-                  <X size={24} />
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+            <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <div>
+                  <h2 className="text-xl font-bold text-white">
+                    {selectedRequest
+                      ? 'Chỉnh Sửa Yêu Cầu Nghỉ Phép'
+                      : 'Tạo Yêu Cầu Nghỉ Phép'}
+                  </h2>
+                  <p className="text-blue-100 text-sm mt-1">
+                    Điền thông tin nghỉ phép của nhân viên
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="p-2 rounded-lg text-white hover:bg-white/20 transition"
+                >
+                  <X size={20} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit(handleSubmitRequest)} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Employee *</label>
-                  <select
-                    {...register('employee_id', { required: true })}
-                    className="w-full px-3 py-2 border border-border rounded-lg"
-                  >
-                    <option value="">Select employee</option>
-                    {employees.map(emp => (
-                      <option key={emp.id} value={emp.id}>
-                        {emp.full_name} ({emp.employee_code})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Body */}
+              <div className="p-6">
+                <form
+                  onSubmit={handleSubmit(handleSubmitRequest)}
+                  className="space-y-5"
+                >
+                  <div>
+                    <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Nhân Viên *
+                    </label>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Leave Type *</label>
-                  <select
-                    {...register('leave_type', { required: true })}
-                    className="w-full px-3 py-2 border border-border rounded-lg"
-                  >
-                    <option value="">Select type</option>
-                    <option value="vacation">Vacation</option>
-                    <option value="sick">Sick Leave</option>
-                    <option value="personal">Personal</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+                    <select
+                      {...register('employee_id', { required: true })}
+                      className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Chọn nhân viên</option>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Start Date *</label>
-                  <input
-                    type="date"
-                    {...register('start_date', { required: true })}
-                    className="w-full px-3 py-2 border border-border rounded-lg"
-                  />
-                </div>
+                      {employees.map(emp => (
+                        <option key={emp.id} value={emp.id}>
+                          {emp.full_name} ({emp.employee_code})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">End Date *</label>
-                  <input
-                    type="date"
-                    {...register('end_date', { required: true })}
-                    className="w-full px-3 py-2 border border-border rounded-lg"
-                  />
-                </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Loại Nghỉ Phép *
+                    </label>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Reason</label>
-                  <textarea
-                    {...register('reason')}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-border rounded-lg"
-                  />
-                </div>
+                    <select
+                      {...register('leave_type', { required: true })}
+                      className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Chọn loại nghỉ</option>
+                      <option value="vacation">Nghỉ phép năm</option>
+                      <option value="sick">Nghỉ ốm</option>
+                      <option value="personal">Nghỉ cá nhân</option>
+                      <option value="other">Khác</option>
+                    </select>
+                  </div>
 
-                <div className="flex gap-3 justify-end pt-4 border-t border-border">
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit">{selectedRequest ? 'Update' : 'Submit'}</Button>
-                </div>
-              </form>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Ngày Bắt Đầu *
+                      </label>
+
+                      <input
+                        type="date"
+                        lang="vi"
+                        placeholder="dd/mm/yyyy"
+                        {...register('start_date', { required: true })}
+                        className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Ngày Kết Thúc *
+                      </label>
+
+                      <input
+                        type="date"
+                        lang="vi"
+                        placeholder="dd/mm/yyyy"
+                        {...register('end_date', { required: true })}
+                        className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Lý Do Nghỉ Phép
+                    </label>
+
+                    <textarea
+                      {...register('reason')}
+                      rows={4}
+                      placeholder="Nhập lý do nghỉ phép..."
+                      className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsDialogOpen(false)}
+                      className="rounded-xl"
+                    >
+                      Hủy
+                    </Button>
+
+                    <Button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6"
+                    >
+                      {selectedRequest ? 'Cập Nhật' : 'Gửi Yêu Cầu'}
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         )}
+```
+
+    
       </div>
     </DashboardLayout>
   )

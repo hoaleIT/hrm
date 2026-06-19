@@ -1,28 +1,34 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+// import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
-
+import { useForm, SubmitHandler } from 'react-hook-form'
 const employeeSchema = z.object({
   employee_code: z.string().min(1, 'Employee code is required'),
   full_name: z.string().min(1, 'Full name is required'),
-  email: z.email('Invalid email'),
+  email: z.string().min(1, 'Email is required').email('Invalid email format'),
+
   phone: z.string().optional(),
   gender: z.string().optional(),
   birth_date: z.string().optional(),
   address: z.string().optional(),
+
   department_id: z.string().optional(),
   position_id: z.string().optional(),
+
   salary: z.number().optional(),
-  start_date: z.string(),
+
+  start_date: z.string().min(1, 'Start date is required'),
+
   status: z.enum(['active', 'inactive', 'on_leave']),
 })
+export type EmployeeFormData = z.infer<typeof employeeSchema>
 
-type EmployeeFormData = z.infer<typeof employeeSchema>
+// if
 
 interface EmployeeDialogProps {
   isOpen: boolean
@@ -63,9 +69,9 @@ export function EmployeeDialog({
     try {
       setLocalLoading(true)
       // Convert salary to number
-      const submitData = {
+      const submitData: EmployeeFormData = {
         ...data,
-        salary: data.salary ? parseFloat(String(data.salary)) : undefined,
+        salary: data.salary ?? undefined,
         department_id: data.department_id || undefined,
         position_id: data.position_id || undefined,
       }
@@ -73,24 +79,29 @@ export function EmployeeDialog({
       reset()
       onClose()
     } catch (error) {
-      console.error('[v0] Form submission error:', error)
+      console.error('Lỗi khi gửi biểu mẫu:', error)
     } finally {
       setLocalLoading(false)
     }
   }
+  const inputClass =
+  'w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition'
 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-card rounded-lg border border-border p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
+    // <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 shadow-2xl">        
+          {/* <div className="flex items-center justify-between mb-6"> */}
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-slate-700">
           <h2 className="text-2xl font-bold text-foreground">
             {initialData ? 'Edit Employee' : 'Add Employee'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-accent rounded transition-colors"
+            // className="p-1 hover:bg-accent rounded transition-colors"
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X size={24} />
           </button>
@@ -101,7 +112,7 @@ export function EmployeeDialog({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">
-                Employee Code *
+                Mã nhân viên *
               </label>
               <input
                 type="text"
@@ -117,7 +128,7 @@ export function EmployeeDialog({
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">
-                Full Name *
+                Họ và tên *
               </label>
               <input
                 type="text"
@@ -171,15 +182,15 @@ export function EmployeeDialog({
                 className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 disabled={localLoading}
               >
-                <option value="">Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="">Chọn giới tính</option>
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+                <option value="other">Khác</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">
-                Birth Date
+                Ngày sinh
               </label>
               <input
                 type="date"
@@ -192,7 +203,7 @@ export function EmployeeDialog({
 
           {/* Address */}
           <div>
-            <label className="block text-sm font-medium mb-1">Address</label>
+            <label className="block text-sm font-medium mb-1">Địa chỉ</label>
             <textarea
               {...register('address')}
               rows={2}
@@ -204,13 +215,13 @@ export function EmployeeDialog({
           {/* Row 4 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Department</label>
+              <label className="block text-sm font-medium mb-1">Phòng ban</label>
               <select
                 {...register('department_id')}
                 className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 disabled={localLoading}
               >
-                <option value="">Select department</option>
+                <option value="">Chọn phòng ban</option>
                 {departments.map(dept => (
                   <option key={dept.id} value={dept.id}>
                     {dept.name}
@@ -219,13 +230,13 @@ export function EmployeeDialog({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Position</label>
+              <label className="block text-sm font-medium mb-1">Chức vụ</label>
               <select
                 {...register('position_id')}
                 className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 disabled={localLoading}
               >
-                <option value="">Select position</option>
+                <option value="">Chọn chức vụ</option>
                 {positions.map(pos => (
                   <option key={pos.id} value={pos.id}>
                     {pos.name}
@@ -239,7 +250,7 @@ export function EmployeeDialog({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">
-                Start Date *
+                Ngày bắt đầu *
               </label>
               <input
                 type="date"
@@ -254,7 +265,7 @@ export function EmployeeDialog({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Salary</label>
+              <label className="block text-sm font-medium mb-1">Lương</label>
               <input
                 type="number"
                 {...register('salary', { valueAsNumber: true })}
@@ -272,9 +283,9 @@ export function EmployeeDialog({
               className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               disabled={isLoading}
             >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="on_leave">On Leave</option>
+              <option value="active">Hoạt động</option>
+              <option value="inactive">Không hoạt động</option>
+              <option value="on_leave">Nghỉ phép</option>
             </select>
           </div>
 
@@ -286,10 +297,10 @@ export function EmployeeDialog({
               onClick={onClose}
               disabled={localLoading}
             >
-              Cancel
+              Hủy
             </Button>
             <Button type="submit" disabled={localLoading}>
-              {localLoading ? 'Saving...' : initialData ? 'Update' : 'Create'}
+              {localLoading ? 'Đang lưu...' : initialData ? 'Cập nhật' : 'Tạo mới'}
             </Button>
           </div>
         </form>

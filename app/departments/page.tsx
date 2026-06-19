@@ -36,15 +36,15 @@ export default function DepartmentsPage() {
   const fetchDepartments = async () => {
     try {
       setError(null)
-      const { data, err } = await supabase
+      const { data, error } = await supabase
         .from('departments')
         .select('*')
 
-      if (err) throw err
+      if (error) throw error
       setDepartments(data || [])
     } catch (err: any) {
       const msg = err?.message || 'Failed to fetch departments'
-      console.error('[v0] Error fetching departments:', err)
+      console.error('Có lỗi xảy ra:', err)
       setError(msg)
     } finally {
       setLoading(false)
@@ -66,19 +66,19 @@ export default function DepartmentsPage() {
   }
 
   const handleDeleteDept = async (id: string) => {
-    if (!confirm('Are you sure?')) return
+    if (!confirm('Bạn có chắc chắn muốn xóa phòng ban này?')) return
 
     try {
       setError(null)
       const { error } = await supabase.from('departments').delete().eq('id', id)
       if (error) throw error
       setDepartments(departments.filter(d => d.id !== id))
-      alert('Department deleted successfully')
+      alert('Phòng ban đã được xóa thành công')
     } catch (err: any) {
       const msg = err?.message || 'Failed to delete department'
-      console.error('[v0] Error deleting department:', err)
+      console.error('Lỗi:', err)
       setError(msg)
-      alert('Error: ' + msg)
+      alert('Lỗi: ' + msg)
     }
   }
 
@@ -92,30 +92,30 @@ export default function DepartmentsPage() {
           .update(data)
           .eq('id', selectedDept.id)
         if (error) throw error
-        alert('Department updated successfully')
+        alert('Phòng ban đã được cập nhật thành công')
       } else {
         const { error } = await supabase.from('departments').insert([data])
         if (error) throw error
-        alert('Department created successfully')
+        alert('Phòng ban đã được tạo thành công')
       }
       await fetchDepartments()
       setIsDialogOpen(false)
     } catch (err: any) {
       const msg = err?.message || 'Failed to save department'
-      console.error('[v0] Error saving department:', err)
+      console.error('Có lỗi xảy ra khi lưu phòng ban:', err)
       setError(msg)
-      alert('Error: ' + msg)
+      alert('Lỗi: ' + msg)
     } finally {
       setDialogLoading(false)
     }
   }
 
   const columns = [
-    { key: 'name' as const, label: 'Department Name', sortable: true },
-    { key: 'description' as const, label: 'Description' },
+    { key: 'name' as const, label: 'Tên Phòng Ban', sortable: true },
+    { key: 'description' as const, label: 'Mô Tả' },
     {
       key: 'id' as const,
-      label: 'Actions',
+      label: 'Hành Động',
       render: (value: string, row: Department) => (
         <div className="flex gap-2">
           <button onClick={() => handleEditDept(row)} className="p-1 hover:bg-accent rounded">
@@ -136,7 +136,7 @@ export default function DepartmentsPage() {
         {error && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3">
             <div className="flex-1">
-              <h3 className="font-semibold text-red-800 dark:text-red-400">Error</h3>
+              <h3 className="font-semibold text-red-800 dark:text-red-400">Lỗi</h3>
               <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
             </div>
             <button
@@ -150,35 +150,37 @@ export default function DepartmentsPage() {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Departments</h1>
-            <p className="text-muted-foreground mt-1">Manage organization departments</p>
+            <h1 className="text-3xl font-bold text-foreground">Phòng Ban</h1>
+            <p className="text-muted-foreground mt-1">Quản lý phòng ban trong tổ chức</p>
           </div>
           <Button onClick={handleAddDept} className="flex items-center gap-2">
             <Plus size={20} />
-            Add Department
+            Thêm Phòng Ban
           </Button>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">Đang tải...</p>
           </div>
         ) : (
           <DataTable
             columns={columns}
             data={departments}
-            searchPlaceholder="Search departments..."
+            searchPlaceholder="Tìm kiếm phòng ban..."
             searchableFields={['name']}
           />
         )}
 
         {/* Dialog */}
         {isDialogOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-card rounded-lg border border-border p-6 w-full max-w-md">
+          // <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          //   <div className="bg-card rounded-lg border border-border p-6 w-full max-w-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+           <div className="w-full max-w-2xl rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 shadow-2xl">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">
-                  {selectedDept ? 'Edit Department' : 'Add Department'}
+                  {selectedDept ? 'Chỉnh Sửa Phòng Ban' : 'Thêm Phòng Ban'}
                 </h2>
                 <button onClick={() => setIsDialogOpen(false)} className="p-1 hover:bg-accent rounded">
                   <X size={24} />
@@ -187,10 +189,10 @@ export default function DepartmentsPage() {
 
               <form onSubmit={handleSubmit(handleSubmitDept)} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Department Name *</label>
+                  <label className="block text-sm font-medium mb-1">Tên Phòng Ban *</label>
                   <input
                     type="text"
-                    {...register('name', { required: 'Name is required' })}
+                    {...register('name', { required: 'Tên là bắt buộc' })}
                     className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
                     disabled={dialogLoading}
                   />
@@ -198,7 +200,7 @@ export default function DepartmentsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <label className="block text-sm font-medium mb-1">Mô Tả</label>
                   <textarea
                     {...register('description')}
                     rows={3}
@@ -209,10 +211,10 @@ export default function DepartmentsPage() {
 
                 <div className="flex gap-3 justify-end pt-4 border-t border-border">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={dialogLoading}>
-                    Cancel
+                    Hủy
                   </Button>
                   <Button type="submit" disabled={dialogLoading}>
-                    {dialogLoading ? 'Saving...' : selectedDept ? 'Update' : 'Create'}
+                    {dialogLoading ? 'Đang lưu...' : selectedDept ? 'Cập nhật' : 'Tạo mới'}
                   </Button>
                 </div>
               </form>

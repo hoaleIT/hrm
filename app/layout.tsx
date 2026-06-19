@@ -10,9 +10,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'HRM System - Human Resource Management',
-  description: 'Professional HR Management System for managing employees, attendance, leave, and payroll',
-  generator: 'v0.app',
+  title: 'HRM System - Phần mềm quản lý nhân sự',
+  description: 'Phần mềm quản lý nhân sự (HRM) giúp doanh nghiệp quản lý thông tin nhân viên, chấm công, lương thưởng và các quy trình nhân sự khác một cách hiệu quả.',
+  generator: '',
   icons: {
     icon: [
       {

@@ -21,14 +21,14 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 const menuItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Employees', href: '/employees', icon: Users },
-  { label: 'Departments', href: '/departments', icon: Building2 },
-  { label: 'Positions', href: '/positions', icon: Briefcase },
-  { label: 'Attendance', href: '/attendance', icon: Clock },
-  { label: 'Leave Requests', href: '/leave-requests', icon: Calendar },
-  { label: 'Payroll', href: '/payroll', icon: DollarSign },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: 'Tổng quan', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Quản lý nhân viên', href: '/employees', icon: Users },
+  { label: 'Quản lý phòng ban', href: '/departments', icon: Building2 },
+  { label: 'Quản lý chức vụ', href: '/positions', icon: Briefcase },
+  { label: 'Quản lý chấm công', href: '/attendance', icon: Clock },
+  { label: 'Quản lý nghỉ phép', href: '/leave-requests', icon: Calendar },
+  { label: 'Quản lý lương', href: '/payroll', icon: DollarSign },
+  { label: 'Cài đặt hệ thống', href: '/settings', icon: Settings },
 ]
 
 export function Sidebar() {
@@ -100,7 +100,7 @@ export function Sidebar() {
             className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
           >
             <LogOut size={20} />
-            <span className="text-sm font-medium">Logout</span>
+            <span className="text-sm font-medium">Đăng xuất</span>
           </button>
         </div>
       </aside>
@@ -114,7 +114,7 @@ export function Sidebar() {
       )}
 
       {/* Content Offset */}
-      <div className="hidden md:block md:w-64" />
+      {/* <div className="hidden md:block md:w-64" /> */}
     </>
   )
 }

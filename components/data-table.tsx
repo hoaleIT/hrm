@@ -23,7 +23,7 @@ export function DataTable<T extends { id?: string | number }>({
   columns,
   data,
   onRowClick,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder = 'Tìm kiếm...',
   searchableFields = [],
 }: DataTableProps<T>) {
   const [sortConfig, setSortConfig] = useState<{
@@ -128,7 +128,7 @@ export function DataTable<T extends { id?: string | number }>({
               {sortedData.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length} className="px-6 py-8 text-center">
-                    <p className="text-muted-foreground">No data found</p>
+                    <p className="text-muted-foreground">Không tìm thấy dữ liệu</p>
                   </td>
                 </tr>
               ) : (
@@ -159,7 +159,7 @@ export function DataTable<T extends { id?: string | number }>({
       {sortedData.length > 0 && (
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <p>
-            Showing {sortedData.length} of {data.length} results
+            Đang hiển thị {sortedData.length} của {data.length} kết quả
           </p>
         </div>
       )}

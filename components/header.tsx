@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button'
 
 const pageNames: Record<string, string> = {
   '/dashboard': 'Dashboard',
-  '/employees': 'Employees',
-  '/departments': 'Departments',
-  '/positions': 'Positions',
-  '/attendance': 'Attendance',
-  '/leave-requests': 'Leave Requests',
-  '/payroll': 'Payroll',
-  '/settings': 'Settings',
+  '/employees': 'Nhân viên',
+  '/departments': 'Phòng ban',
+  '/positions': 'Chức vụ',
+  '/attendance': 'Chấm công',
+  '/leave-requests': 'Đơn xin nghỉ phép',
+  '/payroll': 'Bảng lương',
+  '/settings': 'Cài đặt',
 }
 
 export function Header() {
@@ -39,7 +39,7 @@ export function Header() {
             <Search size={18} className="text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Tìm kiếm..."
               className="bg-transparent outline-none text-sm text-foreground placeholder-muted-foreground w-32"
             />
           </div>

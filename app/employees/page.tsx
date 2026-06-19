@@ -9,6 +9,7 @@ import { DataTable } from '@/components/data-table'
 import { EmployeeDialog } from '@/components/employee-dialog'
 import { Button } from '@/components/ui/button'
 import { Plus, Trash2, Edit2 } from 'lucide-react'
+import type { EmployeeFormData } from '@/components/employee-dialog'
 
 interface Employee {
   id: string
@@ -87,8 +88,8 @@ export default function EmployeesPage() {
       setDepartments(deptsData || [])
       setPositions(posData || [])
     } catch (err: any) {
-      const errorMsg = err?.message || 'Failed to fetch data'
-      console.error('[v0] Error fetching data:', err)
+      const errorMsg = err?.message || 'Đã có lỗi xảy ra khi tải dữ liệu'
+      console.error('Có lỗi xảy ra:', err)
       setError(errorMsg)
     } finally {
       setLoading(false)
@@ -121,9 +122,9 @@ export default function EmployeesPage() {
       alert('Employee deleted successfully')
     } catch (err: any) {
       const errorMsg = err?.message || 'Failed to delete employee'
-      console.error('[v0] Error deleting employee:', err)
+      console.error('Có lỗi xảy ra:', err)
       setError(errorMsg)
-      alert('Error: ' + errorMsg)
+      alert('Lỗi: ' + errorMsg)
     }
   }
 
@@ -138,7 +139,7 @@ export default function EmployeesPage() {
           .eq('id', selectedEmployee.id)
 
         if (error) throw error
-        alert('Employee updated successfully')
+        alert('Nhân viên đã được cập nhật thành công')
       } else {
         // Create
         const { error } = await supabase
@@ -146,16 +147,16 @@ export default function EmployeesPage() {
           .insert([data])
 
         if (error) throw error
-        alert('Employee created successfully')
+        alert('Nhân viên đã được tạo thành công')
       }
 
       await fetchData()
       setIsDialogOpen(false)
     } catch (err: any) {
       const errorMsg = err?.message || 'Failed to save employee'
-      console.error('[v0] Error saving employee:', err)
+      console.error('Có lỗi xảy ra:', err)
       setError(errorMsg)
-      alert('Error: ' + errorMsg)
+      alert('Lỗi: ' + errorMsg)
     }
   }
 
@@ -168,12 +169,12 @@ export default function EmployeesPage() {
   const columns = [
     {
       key: 'employee_code' as const,
-      label: 'Employee Code',
+      label: 'Mã Nhân Viên',
       sortable: true,
     },
     {
       key: 'full_name' as const,
-      label: 'Name',
+      label: 'Tên',
       sortable: true,
     },
     {
@@ -183,21 +184,21 @@ export default function EmployeesPage() {
     },
     {
       key: 'phone' as const,
-      label: 'Phone',
+      label: 'Số Điện Thoại',
     },
     {
       key: 'department_id' as const,
-      label: 'Department',
+      label: 'Phòng Ban',
       render: (value: any, row: Employee) => row.department?.name || '-',
     },
     {
       key: 'position_id' as const,
-      label: 'Position',
+      label: 'Chức Vụ',
       render: (value: any, row: Employee) => row.position?.name || '-',
     },
     {
       key: 'status' as const,
-      label: 'Status',
+      label: 'Trạng Thái',
       render: (value: string) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[value as keyof typeof statusColors]}`}>
           {value.charAt(0).toUpperCase() + value.slice(1).replace('_', ' ')}
@@ -206,25 +207,25 @@ export default function EmployeesPage() {
     },
     {
       key: 'start_date' as const,
-      label: 'Start Date',
+      label: 'Ngày Bắt Đầu',
       sortable: true,
     },
     {
       key: 'id' as const,
-      label: 'Actions',
+      label: 'Hành Động',
       render: (value: string, row: Employee) => (
         <div className="flex gap-2">
           <button
             onClick={() => handleEditEmployee(row)}
             className="p-1 hover:bg-accent rounded transition-colors"
-            title="Edit"
+            title="Sửa"
           >
             <Edit2 size={16} />
           </button>
           <button
             onClick={() => handleDeleteEmployee(row.id)}
             className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded text-red-600 dark:text-red-400 transition-colors"
-            title="Delete"
+            title="Xóa"
           >
             <Trash2 size={16} />
           </button>
@@ -240,7 +241,7 @@ export default function EmployeesPage() {
         {error && (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-start gap-3">
             <div className="flex-1">
-              <h3 className="font-semibold text-red-800 dark:text-red-400">Error</h3>
+              <h3 className="font-semibold text-red-800 dark:text-red-400">Lỗi</h3>
               <p className="text-sm text-red-700 dark:text-red-300 mt-1">{error}</p>
             </div>
             <button
@@ -255,27 +256,27 @@ export default function EmployeesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Employees</h1>
+            <h1 className="text-3xl font-bold text-foreground">Nhân Viên</h1>
             <p className="text-muted-foreground mt-1">
-              Manage your organization&apos;s employees
+              Quản lý nhân viên trong tổ chức
             </p>
           </div>
           <Button onClick={handleAddEmployee} className="flex items-center gap-2">
             <Plus size={20} />
-            Add Employee
+            Thêm Nhân Viên
           </Button>
         </div>
 
         {/* Data Table */}
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">Đang tải...</p>
           </div>
         ) : (
           <DataTable
             columns={columns}
             data={employees}
-            searchPlaceholder="Search by name, email, or code..."
+            searchPlaceholder="Tìm kiếm theo tên, email, hoặc mã..."
             searchableFields={['full_name', 'email', 'employee_code']}
           />
         )}
@@ -287,7 +288,24 @@ export default function EmployeesPage() {
           onSubmit={handleSubmit}
           departments={departments}
           positions={positions}
-          initialData={selectedEmployee}
+          initialData={
+            selectedEmployee
+              ? {
+                  employee_code: selectedEmployee.employee_code,
+                  full_name: selectedEmployee.full_name,
+                  email: selectedEmployee.email,
+                  phone: selectedEmployee.phone ?? '',
+                  gender: selectedEmployee.gender ?? '',
+                  birth_date: selectedEmployee.birth_date ?? '',
+                  address: selectedEmployee.address ?? '',
+                  department_id: selectedEmployee.department_id,
+                  position_id: selectedEmployee.position_id,
+                  salary: selectedEmployee.salary,
+                  start_date: selectedEmployee.start_date,
+                  status: selectedEmployee.status,
+                }
+              : undefined
+          }
         />
       </div>
     </DashboardLayout>

@@ -25,28 +25,28 @@ import {
 
 // Mock data for charts
 const employeeGrowthData = [
-  { month: 'Jan', employees: 45 },
-  { month: 'Feb', employees: 48 },
-  { month: 'Mar', employees: 52 },
-  { month: 'Apr', employees: 55 },
-  { month: 'May', employees: 58 },
-  { month: 'Jun', employees: 62 },
+  { month: 'Tháng 1', employees: 45 },
+  { month: 'Tháng 2', employees: 48 },
+  { month: 'Tháng 3', employees: 52 },
+  { month: 'Tháng 4', employees: 55 },
+  { month: 'Tháng 5', employees: 58 },
+  { month: 'Tháng 6', employees: 62 },
 ]
 
 const departmentData = [
-  { name: 'Engineering', value: 35, fill: '#2563eb' },
-  { name: 'Sales', value: 12, fill: '#60a5fa' },
-  { name: 'HR', value: 8, fill: '#93c5fd' },
-  { name: 'Operations', value: 7, fill: '#dbeafe' },
+  { name: 'Kỹ thuật', value: 35, fill: '#2563eb' },
+  { name: 'Bán hàng', value: 12, fill: '#60a5fa' },
+  { name: 'Nhân sự', value: 8, fill: '#93c5fd' },
+  { name: 'Vận hành', value: 7, fill: '#dbeafe' },
 ]
 
 const leaveData = [
-  { month: 'Jan', approved: 8, pending: 2, rejected: 1 },
-  { month: 'Feb', approved: 12, pending: 3, rejected: 0 },
-  { month: 'Mar', approved: 15, pending: 2, rejected: 1 },
-  { month: 'Apr', approved: 10, pending: 4, rejected: 2 },
-  { month: 'May', approved: 18, pending: 1, rejected: 0 },
-  { month: 'Jun', approved: 14, pending: 3, rejected: 1 },
+  { month: 'Tháng 1', approved: 8, pending: 2, rejected: 1 },
+  { month: 'Tháng 2', approved: 12, pending: 3, rejected: 0 },
+  { month: 'Tháng 3', approved: 15, pending: 2, rejected: 1 },
+  { month: 'Tháng 4', approved: 10, pending: 4, rejected: 2 },
+  { month: 'Tháng 5', approved: 18, pending: 1, rejected: 0 },
+  { month: 'Tháng 6', approved: 14, pending: 3, rejected: 1 },
 ]
 
 export default function DashboardPage() {
@@ -100,25 +100,25 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             icon={Users}
-            label="Total Employees"
+            label="Tổng Nhân Viên"
             value={stats.totalEmployees}
             trend={{ value: 12, isPositive: true }}
           />
           <StatCard
             icon={CheckCircle}
-            label="Active Employees"
+            label="Nhân Viên Hoạt Động"
             value={stats.activeEmployees}
             trend={{ value: 5, isPositive: true }}
           />
           <StatCard
             icon={Calendar}
-            label="On Leave"
+            label="Nghỉ phép"
             value={stats.onLeave}
             trend={{ value: 2, isPositive: false }}
           />
           <StatCard
             icon={TrendingUp}
-            label="New This Month"
+            label="Mới Tháng Này"
             value={stats.newThisMonth}
             trend={{ value: 8, isPositive: true }}
           />
@@ -129,7 +129,7 @@ export default function DashboardPage() {
           {/* Employee Growth Chart */}
           <div className="lg:col-span-2 bg-card rounded-lg border border-border p-6">
             <h3 className="text-lg font-semibold text-foreground mb-4">
-              Employee Growth
+              Tăng trưởng nhân viên
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={employeeGrowthData}>
@@ -158,7 +158,7 @@ export default function DashboardPage() {
           {/* Department Distribution */}
           <div className="bg-card rounded-lg border border-border p-6">
             <h3 className="text-lg font-semibold text-foreground mb-4">
-              Departments
+              Phân bố phòng ban
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
         {/* Leave Requests Chart */}
         <div className="bg-card rounded-lg border border-border p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">
-            Leave Requests Overview
+            Tổng Quan Yêu Cầu Nghỉ Phép
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={leaveData}>
@@ -211,19 +211,19 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-primary/10 rounded-lg border border-primary/20 p-4">
             <p className="text-sm font-medium text-foreground mb-2">
-              Pending Leave Requests
+              Yêu Cầu Nghỉ Phép Đang Chờ
             </p>
             <p className="text-2xl font-bold text-primary">12</p>
           </div>
           <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800 p-4">
             <p className="text-sm font-medium text-foreground mb-2">
-              Attendance Issues
+              Sự Cố Thời Gian Làm Việc
             </p>
             <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">8</p>
           </div>
           <div className="bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 p-4">
             <p className="text-sm font-medium text-foreground mb-2">
-              Payroll Ready
+              Lương và Thanh toán Chờ Xử Lý
             </p>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">Yes</p>
           </div>

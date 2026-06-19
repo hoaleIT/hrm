@@ -70,16 +70,11 @@ export default function AttendancePage() {
   const handleCheckIn = async (employeeId: string) => {
     try {
       const now = new Date()
-      const existingRecord = attendance.find(
-        a => a.employee_id === employeeId && a.date === selectedDate
-      )
 
-      if (existingRecord) {
-        alert('Already checked in today')
-        return
-      }
+      console.log('employeeId:', employeeId)
+      console.log('selectedDate:', selectedDate)
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('attendance')
         .insert([
           {
@@ -89,11 +84,19 @@ export default function AttendancePage() {
             status: now.getHours() > 9 ? 'late' : 'present',
           },
         ])
+        .select()
 
-      if (error) throw error
+      console.log('data:', data)
+
+      if (error) {
+        console.error('Supabase Error:', error)
+        alert(error.message)
+        return
+      }
+
       await fetchData()
     } catch (error) {
-      console.error('Error checking in:', error)
+      console.error(error)
     }
   }
 

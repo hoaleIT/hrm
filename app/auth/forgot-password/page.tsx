@@ -3,80 +3,54 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Mail, Lock, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Mail, ArrowLeft, AlertCircle, CheckCircle2 } from 'lucide-react'
 
-export default function LoginPage() {
-  const router = useRouter()
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
   const supabase = createClient()
 
-  const validateForm = () => {
-    let isValid = true
+  const validateEmail = () => {
     setEmailError('')
-    setPasswordError('')
-
     if (!email) {
-      setEmailError('Email là trường bắt buộc')
-      isValid = false
+      setEmailError('Email bắt buộc')
+      return false
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Định dạng email không hợp lệ')
-      isValid = false
+      return false
     }
-
-    if (!password) {
-      setPasswordError('Password là trường bắt buộc')
-      isValid = false
-    } else if (password.length < 6) {
-      setPasswordError('Password phải có ít nhất 6 ký tự')
-      isValid = false
-    }
-
-    return isValid
+    return true
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
 
-    if (!validateForm()) return
+    if (!validateEmail()) return
 
     setLoading(true)
 
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
       })
 
-      if (authError) {
-        if (authError.message.includes('Invalid login credentials')) {
-          setError('Email hoặc mật khẩu không đúng')
-        } else if (authError.message.includes('Email not confirmed')) {
-          setError('Vui lòng xác nhận email của bạn trước khi đăng nhập')
-        } else {
-          setError(authError.message)
-        }
+      if (resetError) {
+        setError(resetError.message)
         return
       }
 
-      setSuccess('Đăng nhập thành công! Đang chuyển hướng...')
-      setTimeout(() => {
-        router.push('/dashboard')
-        router.refresh()
-      }, 1000)
+      setSuccess('Email đặt lại mật khẩu đã được gửi! Vui lòng kiểm tra hộp thư đến của bạn.')
+      setEmail('')
     } catch (err) {
-      setError('Có lỗi xảy ra. Vui lòng thử lại.')
+      setError('Đã xảy ra lỗi. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -88,10 +62,10 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg mb-4">
-            <Lock className="w-7 h-7 text-white" />
+            <Mail className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Chào mừng bạn trở lại</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">Đăng nhập vào tài khoản HRM của bạn</p>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Đặt Lại Mật Khẩu</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-2">Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu</p>
         </div>
 
         {/* Card */}
@@ -112,7 +86,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleForgotPassword} className="space-y-5">
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
@@ -135,40 +109,13 @@ export default function LoginPage() {
               {emailError && <p className="text-xs text-red-600 dark:text-red-400 mt-1.5">{emailError}</p>}
             </div>
 
-            {/* Password Field */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label htmlFor="password" className="text-sm font-semibold text-slate-900 dark:text-white">
-                  Mật Khẩu
-                </label>
-                <Link href="/auth/forgot-password" className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                  Quên mật khẩu?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                    setPasswordError('')
-                  }}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                />
-              </div>
-              {passwordError && <p className="text-xs text-red-600 dark:text-red-400 mt-1.5">{passwordError}</p>}
-            </div>
-
             {/* Submit Button */}
             <Button
               type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 dark:from-cyan-600 dark:to-blue-700 text-white font-semibold py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg"
             >
-              {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
+              {loading ? 'Đang gửi...' : 'Gửi Email Đặt Lại Mật Khẩu'}
             </Button>
           </form>
 
@@ -178,27 +125,21 @@ export default function LoginPage() {
               <div className="w-full border-t border-slate-300 dark:border-slate-600"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400">Mới sử dụng HRM?</span>
+              <span className="px-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400">Nhớ mật khẩu của bạn?</span>
             </div>
           </div>
 
-          {/* Sign Up Link */}
-          <Link href="/auth/sign-up">
+          {/* Back to Login */}
+          <Link href="/auth/login">
             <Button
               type="button"
               variant="outline"
-              className="w-full border-2 border-blue-200 dark:border-slate-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 font-medium"
+              className="w-full border-2 border-blue-200 dark:border-slate-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 font-medium flex items-center justify-center gap-2"
             >
-              Tạo tài khoản
+              <ArrowLeft className="w-4 h-4" />
+              Quay lại Đăng nhập
             </Button>
           </Link>
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-6 p-4 bg-blue-50 dark:bg-slate-700 rounded-lg text-center">
-          {/* <p className="text-xs font-mono text-slate-600 dark:text-slate-300">
-            Test: <span className="font-semibold">admin@company.com</span> / <span className="font-semibold">Admin@123456</span>
-          </p> */}
         </div>
       </div>
     </div>
