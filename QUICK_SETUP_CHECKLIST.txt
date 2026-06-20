@@ -1,0 +1,154 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    HRM SYSTEM - QUICK SETUP CHECKLIST                       ║
+║                           (30 Minutes Total)                                ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+PREPARE (5 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ Download project ZIP from v0
+□ Unzip to a folder
+□ Open folder in VS Code (File → Open Folder)
+□ Open Terminal (Terminal → New Terminal)
+
+SUPABASE CREDENTIALS (5 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ Go to: https://app.supabase.com
+□ Login with your Supabase account
+□ Select your project
+□ Click Settings (gear icon) → API
+□ Copy "Project URL" 
+   Example: https://xyzzzzz.supabase.co
+□ Copy "anon public" Key
+   Example: eyJhbGciOiJIUzI1NiIs...
+
+SETUP ENVIRONMENT FILE (5 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ In VS Code, create file: .env.local
+   (Right click on root folder → New File)
+
+□ Paste this (replace with your values):
+
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key-here
+
+□ Replace:
+   - https://your-project-id.supabase.co → your Supabase URL
+   - your-key-here → your anon public key
+
+□ Save file (Ctrl+S or Cmd+S)
+
+INSTALL DEPENDENCIES (3 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ In Terminal, run:
+
+npm install
+
+□ Wait for completion (may take 1-2 minutes)
+□ You should see "added X packages"
+
+START DEV SERVER (2 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ In Terminal, run:
+
+npm run dev
+
+□ You should see:
+   ▲ Next.js 16.2.6
+   - Local: http://localhost:3000
+
+□ Open browser to: http://localhost:3000
+
+TEST APPLICATION (5 min)
+═════════════════════════════════════════════════════════════════════════════
+
+□ See login page with light blue theme
+□ Click "Create an account" 
+□ Fill in:
+   - Email: admin@company.com
+   - Password: Admin@123456
+   - Confirm Password: Admin@123456
+□ Click "Sign Up"
+□ Check email for verification link (check spam folder)
+□ Click link to confirm email
+□ Return to app and login with:
+   - Email: admin@company.com  
+   - Password: Admin@123456
+□ See dashboard with employees list
+□ Test: Click "Add Employee" → fill form → Save
+
+MAKE ADMIN USER (Optional but Recommended)
+═════════════════════════════════════════════════════════════════════════════
+
+□ Go to: https://app.supabase.com
+□ Click "SQL Editor"
+□ Paste this query:
+
+UPDATE public.users 
+SET role = 'admin' 
+WHERE email = 'admin@company.com';
+
+□ Click "RUN"
+□ Go back to app, logout and login again
+□ You should now have admin access
+
+VERIFY EVERYTHING WORKS
+═════════════════════════════════════════════════════════════════════════════
+
+✅ Check these:
+   □ Can see login page
+   □ Can create account
+   □ Can login after email confirmation  
+   □ Can see dashboard
+   □ Can see employees list (from database)
+   □ Can add new employee
+   □ Can edit employee
+   □ Can delete employee
+   □ Light blue color theme visible
+   □ Dark mode toggle works (if available)
+
+TROUBLESHOOTING
+═════════════════════════════════════════════════════════════════════════════
+
+Problem: "NEXT_PUBLIC_SUPABASE_URL is not set"
+Solution:
+  □ Check .env.local file exists
+  □ Stop server (Ctrl+C)
+  □ Restart: npm run dev
+
+Problem: "Cannot find module '@supabase/supabase-js'"
+Solution:
+  □ Delete node_modules folder
+  □ Run: npm install
+  □ Run: npm run dev
+
+Problem: Login not working
+Solution:
+  □ Check Supabase project status (green = ok)
+  □ Verify email & password are correct
+  □ Check email is confirmed
+  □ Check database has tables (8 tables should exist)
+
+Problem: Port 3000 already in use
+Solution:
+  □ Run: npm run dev -- -p 3001
+  □ Open: http://localhost:3001
+
+NEXT STEPS
+═════════════════════════════════════════════════════════════════════════════
+
+When everything works:
+□ Read SETUP_PROJECT.md for detailed guide
+□ Read QUICK_START.md for feature overview
+□ Start building your features!
+□ Deploy to Vercel when ready
+
+═════════════════════════════════════════════════════════════════════════════
+Status: Ready to Setup ✅
+Time: 30 minutes
+Difficulty: Easy ⭐
+═════════════════════════════════════════════════════════════════════════════

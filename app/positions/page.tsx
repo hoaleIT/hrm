@@ -81,7 +81,7 @@ export default function PositionsPage() {
       const msg = err?.message || 'Có lỗi xảy ra khi xóa vị trí'
       console.error('Có lỗi xảy ra khi xóa vị trí:', err)
       setError(msg)
-      alert('Error: ' + msg)
+      alert('Lỗi: ' + msg)
     }
   }
 
@@ -107,7 +107,7 @@ export default function PositionsPage() {
       const msg = err?.message || 'Có lỗi xảy ra khi lưu chức vụ'
       console.error('Có lỗi xảy ra khi lưu chức vụ:', err)
       setError(msg)
-      alert('Error: ' + msg)
+      alert('Lỗi: ' + msg)
     } finally {
       setDialogLoading(false)
     }
