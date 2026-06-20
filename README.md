@@ -1,238 +1,268 @@
-# HRM System - Human Resource Management
+# Hệ Thống HRM - Quản Lý Nguồn Nhân Lực (Human Resource Management)
 
-A modern, production-ready Human Resource Management (HRM) system built with Next.js 16, TypeScript, Tailwind CSS, and Supabase. Includes complete authentication, employee management, and full CRUD operations.
+Hệ thống Quản lý Nguồn nhân lực (HRM) hiện đại, sẵn sàng triển khai thực tế, được xây dựng bằng Next.js 16, TypeScript, Tailwind CSS và Supabase. Hệ thống bao gồm đầy đủ chức năng xác thực người dùng, quản lý nhân viên và các thao tác CRUD hoàn chỉnh.
 
-## Quick Start (30 Minutes)
+## Khởi động nhanh (30 phút)
 
-**See:** [QUICK_SETUP_CHECKLIST.txt](./QUICK_SETUP_CHECKLIST.txt) for step-by-step guide
+**Xem:** `QUICK_SETUP_CHECKLIST.txt` để làm theo hướng dẫn từng bước.
 
-Or follow this quick overview:
+Hoặc thực hiện nhanh theo các bước sau:
 
 ```bash
-# 1. Get Supabase credentials from https://app.supabase.com
-# 2. Create .env.local with credentials
-# 3. Install & run
+# 1. Lấy thông tin Supabase từ https://app.supabase.com
+# 2. Tạo file .env.local với thông tin xác thực
+# 3. Cài đặt và chạy dự án
 npm install
 npm run dev
-# 4. Open http://localhost:3000
-# 5. Signup or login
+
+# 4. Truy cập http://localhost:3000
+# 5. Đăng ký hoặc đăng nhập
 ```
 
-## Features
+## Tính năng
 
-### Authentication System
-- Signup with email & password validation
-- Login with credential verification
-- Forgot password with email reset
-- Password reset functionality
-- Email confirmation required
-- Role-based access (admin, HR, employee)
+### Hệ thống xác thực
 
-### Employee Management
-- Complete employee CRUD operations
-- Detailed employee profiles
-- Department and position assignment
-- Status tracking (active, inactive, on leave)
-- Employee search and filtering
+* Đăng ký tài khoản với kiểm tra email và mật khẩu
+* Đăng nhập với xác thực thông tin
+* Quên mật khẩu và gửi email đặt lại mật khẩu
+* Chức năng đặt lại mật khẩu
+* Yêu cầu xác nhận email
+* Phân quyền theo vai trò (Admin, HR, Employee)
 
-### Dashboard & Analytics
-- Real-time employee statistics
-- Visual analytics with Recharts
-- Department distribution charts
-- Leave request overview
+### Quản lý nhân viên
 
-### Department & Position Management
-- Create/edit/delete departments
-- Position management with allowances
-- Manager assignment
-- Employee count tracking
+* CRUD đầy đủ cho nhân viên
+* Hồ sơ nhân viên chi tiết
+* Phân công phòng ban và vị trí công việc
+* Theo dõi trạng thái (Đang làm việc, Nghỉ việc, Nghỉ phép)
+* Tìm kiếm và lọc nhân viên
 
-### Attendance Tracking
-- Check-in/check-out system
-- Attendance records & reports
-- Status management (present, late, absent, leave)
-- Time tracking with timestamps
+### Dashboard & Thống kê
 
-### Leave Management
-- Employee leave request submission
-- Leave type support (vacation, sick, personal)
-- Request approval/rejection workflow
-- Leave balance tracking
+* Thống kê nhân viên theo thời gian thực
+* Biểu đồ trực quan bằng Recharts
+* Biểu đồ phân bổ nhân sự theo phòng ban
+* Tổng quan yêu cầu nghỉ phép
 
-### Payroll
-- Monthly salary calculation
-- Base salary, allowance, bonus, deduction
-- Payroll status management
-- Currency formatting
+### Quản lý phòng ban & chức vụ
 
-### Design & UX
-- Light blue modern theme
-- Dark mode support
-- Responsive design (mobile, tablet, desktop)
-- Smooth animations & transitions
-- Professional UI with shadcn/ui
+* Tạo/Sửa/Xóa phòng ban
+* Quản lý chức vụ và phụ cấp
+* Gán quản lý cho phòng ban
+* Theo dõi số lượng nhân viên
 
-## Tech Stack
+### Quản lý chấm công
 
-| Category | Tools |
-|----------|-------|
-| **Frontend** | Next.js 16, React 19, TypeScript |
-| **Styling** | Tailwind CSS 4, shadcn/ui |
-| **Database** | Supabase PostgreSQL (8 tables) |
-| **Auth** | Supabase Auth (email/password) |
-| **Forms** | React Hook Form, Zod |
-| **Charts** | Recharts |
-| **Icons** | Lucide React |
+* Hệ thống Check-in / Check-out
+* Lưu trữ lịch sử chấm công và báo cáo
+* Quản lý trạng thái (Có mặt, Đi muộn, Vắng mặt, Nghỉ phép)
+* Theo dõi thời gian làm việc
 
-## Setup Instructions
+### Quản lý nghỉ phép
 
-### Step 1: Prepare (5 min)
-1. Download project ZIP from v0 and unzip
-2. Open folder in VS Code: `File → Open Folder`
-3. Open Terminal: `Terminal → New Terminal`
+* Nhân viên gửi yêu cầu nghỉ phép
+* Hỗ trợ nhiều loại nghỉ phép (Nghỉ năm, Nghỉ ốm, Nghỉ cá nhân)
+* Quy trình phê duyệt hoặc từ chối
+* Theo dõi số ngày phép còn lại
 
-### Step 2: Get Supabase Credentials (5 min)
-1. Go to https://app.supabase.com
-2. Login → Select your project
-3. Click `Settings → API`
-4. Copy:
-   - **Project URL** (e.g., `https://xyzzzzz.supabase.co`)
-   - **anon public key** (starts with `eyJ...`)
+### Quản lý lương
 
-### Step 3: Setup Environment (5 min)
-Create `.env.local` file in project root:
+* Tính lương hàng tháng
+* Quản lý lương cơ bản, phụ cấp, thưởng, khấu trừ
+* Quản lý trạng thái bảng lương
+* Định dạng tiền tệ
+
+### Thiết kế & Trải nghiệm người dùng
+
+* Giao diện hiện đại với tông màu xanh dương nhạt
+* Hỗ trợ Dark Mode
+* Responsive trên điện thoại, máy tính bảng và máy tính
+* Hiệu ứng chuyển động mượt mà
+* Giao diện chuyên nghiệp sử dụng shadcn/ui
+
+## Công nghệ sử dụng
+
+| Danh mục      | Công nghệ                        |
+| ------------- | -------------------------------- |
+| Frontend      | Next.js 16, React 19, TypeScript |
+| Giao diện     | Tailwind CSS 4, shadcn/ui        |
+| Cơ sở dữ liệu | Supabase PostgreSQL (8 bảng)     |
+| Xác thực      | Supabase Auth (Email/Password)   |
+| Form          | React Hook Form, Zod             |
+| Biểu đồ       | Recharts                         |
+| Icons         | Lucide React                     |
+
+## Hướng dẫn cài đặt
+
+### Bước 1: Chuẩn bị (5 phút)
+
+1. Tải file ZIP dự án từ v0 và giải nén
+2. Mở thư mục bằng VS Code: `File → Open Folder`
+3. Mở Terminal: `Terminal → New Terminal`
+
+### Bước 2: Lấy thông tin Supabase (5 phút)
+
+1. Truy cập: https://app.supabase.com
+2. Đăng nhập và chọn dự án
+3. Chọn `Settings → API`
+4. Sao chép:
+
+   * **Project URL** (Ví dụ: `https://xyzzzzz.supabase.co`)
+   * **anon public key** (Bắt đầu bằng `eyJ...`)
+
+### Bước 3: Thiết lập biến môi trường (5 phút)
+
+Tạo file `.env.local` tại thư mục gốc của dự án:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key-here
 ```
 
-Replace with your actual Supabase credentials.
+Thay bằng thông tin Supabase thực tế của bạn.
 
-### Step 4: Install Dependencies (3 min)
+### Bước 4: Cài đặt thư viện (3 phút)
+
 ```bash
 npm install
-# or: pnpm install (faster)
+
+# hoặc
+pnpm install
 ```
 
-### Step 5: Start Dev Server (2 min)
+### Bước 5: Khởi động dự án (2 phút)
+
 ```bash
 npm run dev
-# You'll see: ▲ Next.js 16 - Local: http://localhost:3000
 ```
 
-### Step 6: Test Application (5 min)
-1. Open http://localhost:3000
-2. Click "Create an account"
-3. Signup with your email
-4. Confirm email (check inbox/spam)
-5. Login and explore the dashboard
+Sau khi chạy thành công sẽ hiển thị:
 
-**Done!** You now have a working HRM system.
-
-## Detailed Documentation
-
-For more detailed setup instructions, see:
-
-- **[SETUP_PROJECT.md](./SETUP_PROJECT.md)** - Complete setup guide with troubleshooting
-- **[QUICK_SETUP_CHECKLIST.txt](./QUICK_SETUP_CHECKLIST.txt)** - Step-by-step checklist
-- **[IMPLEMENTATION_COMPLETE.md](./IMPLEMENTATION_COMPLETE.md)** - Feature details
-
-## Project Structure
-
+```bash
+▲ Next.js 16
+- Local: http://localhost:3000
 ```
+
+### Bước 6: Kiểm tra ứng dụng (5 phút)
+
+1. Mở http://localhost:3000
+2. Chọn "Tạo tài khoản"
+3. Đăng ký bằng email của bạn
+4. Xác nhận email (kiểm tra cả thư mục Spam)
+5. Đăng nhập và trải nghiệm hệ thống
+
+**Hoàn tất!** Bạn đã có một hệ thống HRM hoạt động đầy đủ.
+
+## Tài liệu chi tiết
+
+* `SETUP_PROJECT.md` - Hướng dẫn cài đặt đầy đủ và xử lý lỗi
+* `QUICK_SETUP_CHECKLIST.txt` - Danh sách kiểm tra trong 30 phút
+* `IMPLEMENTATION_COMPLETE.md` - Chi tiết các tính năng đã triển khai
+
+## Cấu trúc dự án
+
+```text
 hrm-system/
 ├── app/
-│   ├── auth/               # Login, signup, password reset
-│   ├── dashboard/          # Main dashboard
-│   ├── employees/          # Employee CRUD
-│   ├── departments/        # Department management
-│   ├── positions/          # Position management
-│   ├── attendance/         # Attendance tracking
-│   ├── leave/              # Leave requests
-│   ├── payroll/            # Payroll management
-│   ├── globals.css         # Light blue theme
-│   └── layout.tsx          # Root layout
+│   ├── auth/               # Đăng nhập, đăng ký, đặt lại mật khẩu
+│   ├── dashboard/          # Dashboard chính
+│   ├── employees/          # CRUD nhân viên
+│   ├── departments/        # Quản lý phòng ban
+│   ├── positions/          # Quản lý chức vụ
+│   ├── attendance/         # Quản lý chấm công
+│   ├── leave/              # Quản lý nghỉ phép
+│   ├── payroll/            # Quản lý lương
+│   ├── globals.css         # Theme màu xanh
+│   └── layout.tsx          # Layout gốc
 ├── components/
-│   ├── ui/                 # shadcn/ui components
-│   ├── employee-dialog.tsx # Employee form
+│   ├── ui/                 # Thành phần shadcn/ui
+│   ├── employee-dialog.tsx # Form nhân viên
 │   └── ...
 ├── lib/
-│   ├── supabase/           # Database client
+│   ├── supabase/           # Client kết nối CSDL
 │   └── utils.ts
-├── .env.local              # ← CREATE THIS FILE
+├── .env.local              # File cần tạo
 ├── package.json
 └── tsconfig.json
 ```
 
-## Database (8 Tables)
+## Cơ sở dữ liệu (8 bảng)
 
-| Table | Purpose | Key Columns |
-|-------|---------|-----------|
-| **users** | Authentication | id, email, role, created_at |
-| **employees** | Employee records | id, code, name, email, salary, status |
-| **departments** | Departments | id, name, description, manager_id |
-| **positions** | Job positions | id, name, allowance |
-| **attendance** | Check-in/out | id, employee_id, date, check_in, check_out, status |
-| **leave_requests** | Leave requests | id, employee_id, type, start_date, end_date, status |
-| **payrolls** | Salary records | id, employee_id, month, base_salary, allowance, bonus, total |
-| **notifications** | System alerts | id, user_id, message, read_at |
+| Bảng           | Chức năng           | Các cột chính                                                |
+| -------------- | ------------------- | ------------------------------------------------------------ |
+| users          | Xác thực người dùng | id, email, role, created_at                                  |
+| employees      | Thông tin nhân viên | id, code, name, email, salary, status                        |
+| departments    | Phòng ban           | id, name, description, manager_id                            |
+| positions      | Chức vụ             | id, name, allowance                                          |
+| attendance     | Chấm công           | id, employee_id, date, check_in, check_out, status           |
+| leave_requests | Yêu cầu nghỉ phép   | id, employee_id, type, start_date, end_date, status          |
+| payrolls       | Bảng lương          | id, employee_id, month, base_salary, allowance, bonus, total |
+| notifications  | Thông báo hệ thống  | id, user_id, message, read_at                                |
 
-## User Roles
+## Vai trò người dùng
 
-| Role | Access Level | Features |
-|------|-------------|----------|
-| **Admin** | Full | Everything + user management |
-| **HR** | High | Employees, departments, attendance, payroll, leave approval |
-| **Employee** | Limited | Own profile, leave requests, attendance, payroll |
+| Vai trò  | Mức quyền  | Chức năng                                                       |
+| -------- | ---------- | --------------------------------------------------------------- |
+| Admin    | Toàn quyền | Tất cả chức năng và quản lý người dùng                          |
+| HR       | Quyền cao  | Quản lý nhân viên, phòng ban, chấm công, lương, duyệt nghỉ phép |
+| Employee | Hạn chế    | Xem hồ sơ cá nhân, nghỉ phép, chấm công và lương của bản thân   |
 
-## Color Theme
+## Giao diện màu sắc
 
-- **Light Mode**: Sky Blue (#0369a1) primary, White background
-- **Dark Mode**: Bright Cyan (#06b6d4) primary, Dark Gray background
-- Fully responsive on all devices
+* Chế độ sáng: Sky Blue (#0369a1) làm màu chủ đạo, nền trắng
+* Chế độ tối: Cyan (#06b6d4) làm màu chủ đạo, nền xám đậm
+* Tương thích trên mọi thiết bị
 
-## Troubleshooting
+## Khắc phục sự cố
 
-**Login not working?**
-- Check email is confirmed
-- Verify Supabase project is active
-- See [SETUP_PROJECT.md](./SETUP_PROJECT.md) Troubleshooting section
+### Không đăng nhập được?
 
-**Dependencies won't install?**
+* Kiểm tra email đã được xác nhận chưa
+* Kiểm tra dự án Supabase còn hoạt động không
+* Xem mục Troubleshooting trong `SETUP_PROJECT.md`
+
+### Không cài đặt được thư viện?
+
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-**Port 3000 already in use?**
+### Cổng 3000 đang được sử dụng?
+
 ```bash
 npm run dev -- -p 3001
 ```
 
-## Next Steps
+## Các bước tiếp theo
 
-1. ✅ Follow [QUICK_SETUP_CHECKLIST.txt](./QUICK_SETUP_CHECKLIST.txt) (30 min)
-2. ✅ Test all CRUD operations
-3. ✅ Create admin account via Supabase
-4. ✅ Deploy to Vercel when ready
+1. Hoàn thành `QUICK_SETUP_CHECKLIST.txt`
+2. Kiểm tra toàn bộ chức năng CRUD
+3. Tạo tài khoản Admin trong Supabase
+4. Triển khai hệ thống lên Vercel
 
-## Deploy to Vercel
+## Triển khai lên Vercel
 
 ```bash
 git push origin main
-# Then connect repo to Vercel
-# Add environment variables in Vercel settings
-# Deploy!
 ```
 
-## Support & Documentation
+Sau đó:
 
-- [SETUP_PROJECT.md](./SETUP_PROJECT.md) - Detailed setup guide ⭐
-- [QUICK_SETUP_CHECKLIST.txt](./QUICK_SETUP_CHECKLIST.txt) - 30-min checklist
-- [IMPLEMENTATION_COMPLETE.md](./IMPLEMENTATION_COMPLETE.md) - Features overview
-- [BUILD_COMPLETE.txt](./BUILD_COMPLETE.txt) - Build summary
+* Kết nối Repository với Vercel
+* Thêm biến môi trường trong phần Settings
+* Thực hiện Deploy
+
+## Hỗ trợ & Tài liệu
+
+* `SETUP_PROJECT.md` - Hướng dẫn cài đặt chi tiết ⭐
+* `QUICK_SETUP_CHECKLIST.txt` - Checklist 30 phút
+* `IMPLEMENTATION_COMPLETE.md` - Tổng quan tính năng
+* `BUILD_COMPLETE.txt` - Tóm tắt quá trình build
 
 ---
 
-**Created:** 2024 | **Stack:** Next.js 16, Supabase, Tailwind | **License:** Private
+**Ngày tạo:** 2024
+**Công nghệ:** Next.js 16, Supabase, Tailwind CSS
+**Giấy phép:** Riêng tư (Private License)
