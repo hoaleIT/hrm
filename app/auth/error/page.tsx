@@ -27,15 +27,15 @@ export default function ErrorPage() {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Authentication Error
+            Lỗi xác thực
           </h1>
           <p className="text-gray-600 mb-6">
-            An error occurred during authentication. Please try again.
+            Đã xảy ra lỗi trong quá trình xác thực. Vui lòng thử lại.
           </p>
 
           <Link href="/auth/login">
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2">
-              Back to Login
+              Quay lại đăng nhập
             </Button>
           </Link>
         </div>

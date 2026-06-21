@@ -89,14 +89,14 @@ export default function AttendancePage() {
       console.log('data:', data)
 
       if (error) {
-        console.error('Supabase Error:', error)
+        console.error('Lỗi supabase:', error)
         alert(error.message)
         return
       }
 
       await fetchData()
     } catch (error) {
-      console.error(error)
+      console.error('Lỗi khi kiểm tra vào:', error)
     }
   }
 
@@ -111,7 +111,7 @@ export default function AttendancePage() {
       if (error) throw error
       await fetchData()
     } catch (error) {
-      console.error('Error checking out:', error)
+      console.error('Lỗi khi kiểm tra ra:', error)
     }
   }
 
@@ -135,12 +135,12 @@ export default function AttendancePage() {
   const columns = [
     {
       key: 'date' as const,
-      label: 'Date',
+      label: 'Ngày chấm công',
       sortable: true,
     },
     {
       key: 'employee_id' as const,
-      label: 'Employee',
+      label: 'Nhân viên',
       render: (value: string, row: AttendanceRecord) => row.employee?.full_name || '-',
     },
     {
@@ -155,7 +155,7 @@ export default function AttendancePage() {
     },
     {
       key: 'status' as const,
-      label: 'Status',
+      label: 'Trạng thái',
       render: (value: string) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[value as keyof typeof statusColors]}`}>
           {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -164,7 +164,7 @@ export default function AttendancePage() {
     },
     {
       key: 'id' as const,
-      label: 'Actions',
+      label: 'Hành động',
       render: (value: string, row: AttendanceRecord) => (
         <div className="flex gap-2">
           {!row.check_in && (
@@ -197,20 +197,20 @@ export default function AttendancePage() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Attendance</h1>
-          <p className="text-muted-foreground mt-1">Manage employee attendance and check-ins</p>
+          <h1 className="text-3xl font-bold text-foreground">Chấm công</h1>
+          <p className="text-muted-foreground mt-1">Quản lý chấm công và kiểm tra vào ra của nhân viên</p>
         </div>
 
         {/* Quick Check-in Section */}
         <div className="bg-card rounded-lg border border-border p-6">
           <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Clock size={20} />
-            Quick Check-In
+            Check-In nhanh 
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Select Date</label>
+              <label className="block text-sm font-medium mb-2">Chọn ngày</label>
               <input
                 type="date"
                 value={selectedDate}
@@ -219,13 +219,13 @@ export default function AttendancePage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Select Employee</label>
+              <label className="block text-sm font-medium mb-2">Chọn nhân viên</label>
               <select
                 value={selectedEmployee}
                 onChange={(e) => setSelectedEmployee(e.target.value)}
                 className="w-full px-3 py-2 border border-border rounded-lg"
               >
-                <option value="">Choose employee...</option>
+                <option value="">Chọn nhân viên...</option>
                 {employees.map(emp => (
                   <option key={emp.id} value={emp.id}>
                     {emp.full_name} ({emp.employee_code})
@@ -247,16 +247,16 @@ export default function AttendancePage() {
 
         {/* Attendance Records */}
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-4">Attendance Records</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Bảng chấm công</h2>
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">Loading...</p>
+              <p className="text-muted-foreground">Đang tải...</p>
             </div>
           ) : (
             <DataTable
               columns={columns}
               data={attendance}
-              searchPlaceholder="Search by employee..."
+              searchPlaceholder="Tìm kiếm chấm công..."
               searchableFields={['date']}
             />
           )}
