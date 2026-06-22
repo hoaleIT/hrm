@@ -12,7 +12,7 @@ Hệ thống Quản lý Nguồn nhân lực (HRM) hiện đại, sẵn sàng tri
 * Quên mật khẩu và gửi email đặt lại mật khẩu
 * Chức năng đặt lại mật khẩu
 * Yêu cầu xác nhận email
-* Phân quyền theo vai trò (Admin, HR, Employee)
+
 
 ### Quản lý nhân viên
 
