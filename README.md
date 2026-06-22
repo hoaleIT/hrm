@@ -93,72 +93,8 @@ npm run dev
 | Biểu đồ       | Recharts                         |
 | Icons         | Lucide React                     |
 
-## Hướng dẫn cài đặt
 
-### Bước 1: Chuẩn bị (5 phút)
 
-1. Tải file ZIP dự án từ v0 và giải nén
-2. Mở thư mục bằng VS Code: `File → Open Folder`
-3. Mở Terminal: `Terminal → New Terminal`
-
-### Bước 2: Lấy thông tin Supabase (5 phút)
-
-1. Truy cập: https://app.supabase.com
-2. Đăng nhập và chọn dự án
-3. Chọn `Settings → API`
-4. Sao chép:
-
-   * **Project URL** (Ví dụ: `https://xyzzzzz.supabase.co`)
-   * **anon public key** (Bắt đầu bằng `eyJ...`)
-
-### Bước 3: Thiết lập biến môi trường (5 phút)
-
-Tạo file `.env.local` tại thư mục gốc của dự án:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key-here
-```
-
-Thay bằng thông tin Supabase thực tế của bạn.
-
-### Bước 4: Cài đặt thư viện (3 phút)
-
-```bash
-npm install
-
-# hoặc
-pnpm install
-```
-
-### Bước 5: Khởi động dự án (2 phút)
-
-```bash
-npm run dev
-```
-
-Sau khi chạy thành công sẽ hiển thị:
-
-```bash
-▲ Next.js 16
-- Local: http://localhost:3000
-```
-
-### Bước 6: Kiểm tra ứng dụng (5 phút)
-
-1. Mở http://localhost:3000
-2. Chọn "Tạo tài khoản"
-3. Đăng ký bằng email của bạn
-4. Xác nhận email (kiểm tra cả thư mục Spam)
-5. Đăng nhập và trải nghiệm hệ thống
-
-**Hoàn tất!** Bạn đã có một hệ thống HRM hoạt động đầy đủ.
-
-## Tài liệu chi tiết
-
-* `SETUP_PROJECT.md` - Hướng dẫn cài đặt đầy đủ và xử lý lỗi
-* `QUICK_SETUP_CHECKLIST.txt` - Danh sách kiểm tra trong 30 phút
-* `IMPLEMENTATION_COMPLETE.md` - Chi tiết các tính năng đã triển khai
 
 ## Cấu trúc dự án
 
@@ -182,7 +118,7 @@ hrm-system/
 ├── lib/
 │   ├── supabase/           # Client kết nối CSDL
 │   └── utils.ts
-├── .env.local              # File cần tạo
+├── .env.local            
 ├── package.json
 └── tsconfig.json
 ```
@@ -200,27 +136,11 @@ hrm-system/
 | payrolls       | Bảng lương          | id, employee_id, month, base_salary, allowance, bonus, total |
 | notifications  | Thông báo hệ thống  | id, user_id, message, read_at                                |
 
-## Vai trò người dùng
 
-| Vai trò  | Mức quyền  | Chức năng                                                       |
-| -------- | ---------- | --------------------------------------------------------------- |
-| Admin    | Toàn quyền | Tất cả chức năng và quản lý người dùng                          |
-| HR       | Quyền cao  | Quản lý nhân viên, phòng ban, chấm công, lương, duyệt nghỉ phép |
-| Employee | Hạn chế    | Xem hồ sơ cá nhân, nghỉ phép, chấm công và lương của bản thân   |
 
-## Giao diện màu sắc
 
-* Chế độ sáng: Sky Blue (#0369a1) làm màu chủ đạo, nền trắng
-* Chế độ tối: Cyan (#06b6d4) làm màu chủ đạo, nền xám đậm
-* Tương thích trên mọi thiết bị
 
-## Khắc phục sự cố
 
-### Không đăng nhập được?
-
-* Kiểm tra email đã được xác nhận chưa
-* Kiểm tra dự án Supabase còn hoạt động không
-* Xem mục Troubleshooting trong `SETUP_PROJECT.md`
 
 ### Không cài đặt được thư viện?
 
@@ -235,34 +155,6 @@ npm install
 npm run dev -- -p 3001
 ```
 
-## Các bước tiếp theo
 
-1. Hoàn thành `QUICK_SETUP_CHECKLIST.txt`
-2. Kiểm tra toàn bộ chức năng CRUD
-3. Tạo tài khoản Admin trong Supabase
-4. Triển khai hệ thống lên Vercel
 
-## Triển khai lên Vercel
 
-```bash
-git push origin main
-```
-
-Sau đó:
-
-* Kết nối Repository với Vercel
-* Thêm biến môi trường trong phần Settings
-* Thực hiện Deploy
-
-## Hỗ trợ & Tài liệu
-
-* `SETUP_PROJECT.md` - Hướng dẫn cài đặt chi tiết ⭐
-* `QUICK_SETUP_CHECKLIST.txt` - Checklist 30 phút
-* `IMPLEMENTATION_COMPLETE.md` - Tổng quan tính năng
-* `BUILD_COMPLETE.txt` - Tóm tắt quá trình build
-
----
-
-**Ngày tạo:** 2024
-**Công nghệ:** Next.js 16, Supabase, Tailwind CSS
-**Giấy phép:** Riêng tư (Private License)
