@@ -2,13 +2,7 @@
 
 Hệ thống Quản lý Nguồn nhân lực (HRM) hiện đại, sẵn sàng triển khai thực tế, được xây dựng bằng Next.js 16, TypeScript, Tailwind CSS và Supabase. Hệ thống bao gồm đầy đủ chức năng xác thực người dùng, quản lý nhân viên và các thao tác CRUD hoàn chỉnh.
 
-## Khởi động nhanh (30 phút)
 
-**Xem:** `QUICK_SETUP_CHECKLIST.txt` để làm theo hướng dẫn từng bước.
-
-Hoặc thực hiện nhanh theo các bước sau:
-
-```bash
 # 1. Lấy thông tin Supabase từ https://app.supabase.com
 # 2. Tạo file .env.local với thông tin xác thực
 # 3. Cài đặt và chạy dự án
